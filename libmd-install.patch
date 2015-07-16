@@ -1,0 +1,44 @@
+--- libmd-0.3/Makefile.in.orig	2000-05-10 15:39:03.000000000 +0200
++++ libmd-0.3/Makefile.in	2015-07-16 20:03:11.740639943 +0200
+@@ -15,6 +15,12 @@
+ OUTDIR=$(PWD)/..
+ SRCDIR=$(PWD)
+ 
++prefix=/usr
++includedir=$(prefix)/include
++libdir=$(prefix)/lib
++datadir=$(prefix)/share
++mandir=$(datadir)/man
++
+ all:	libmd.so.1.0 md2.3 md4.3 md5.3 libmd.a docs
+ 
+ clean:
+@@ -32,17 +38,17 @@
+ 	./mddriver
+ 
+ install:	libmd.so.1.0 libmd.so.1 libmd.so
+-	mkdir -p $(BUILDROOT)/usr/include
+-	mkdir -p $(BUILDROOT)/usr/lib
+-	mkdir -p $(BUILDROOT)/usr/man/man3
+-	$(INSTALL) -g root -o root -m 644 md2.h md4.h md5.h sha.h rmd160.h \
+-		   $(BUILDROOT)/usr/include
+-	$(INSTALL) -g root -o root -m 644 md2.3 md4.3 md5.3 \
+-		   $(BUILDROOT)/usr/man/man3
+-	$(INSTALL) -g root -o root -m 755 libmd.so.1.0 $(BUILDROOT)/usr/lib
+-	$(INSTALL) -g root -o root -m 755 libmd.so.1 $(BUILDROOT)/usr/lib
+-	$(INSTALL) -g root -o root -m 755 libmd.so $(BUILDROOT)/usr/lib
+-	$(INSTALL) -g root -o root -m 755 libmd.a $(BUILDROOT)/usr/lib
++	mkdir -p $(BUILDROOT)$(includedir)
++	mkdir -p $(BUILDROOT)$(libdir)
++	mkdir -p $(BUILDROOT)$(mandir)/man3
++	$(INSTALL) -m 644 md2.h md4.h md5.h sha.h rmd160.h \
++		   $(BUILDROOT)$(includedir)
++	$(INSTALL) -m 644 md2.3 md4.3 md5.3 \
++		   $(BUILDROOT)$(mandir)/man3
++	$(INSTALL) -m 755 libmd.so.1.0 $(BUILDROOT)$(libdir)
++	ln -s libmd.so.1.0 $(BUILDROOT)$(libdir)/libmd.so.1
++	ln -s libmd.so.1.0 $(BUILDROOT)$(libdir)/libmd.so
++	$(INSTALL) -m 644 libmd.a $(BUILDROOT)$(libdir)
+ 
+ binary:	install
+ 	@echo Creating binary .tar.bz2 in directory $(OUTDIR)/
