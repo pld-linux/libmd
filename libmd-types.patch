@@ -1,0 +1,11 @@
+--- libmd-0.3/rmd160.c.orig	1999-07-31 15:49:32.000000000 +0200
++++ libmd-0.3/rmd160.c	2015-07-16 21:52:58.361033103 +0200
+@@ -378,7 +378,7 @@
+    Update the RIPEMD-160 hash state for a block of data.
+  */
+ void
+-RMD160Update (RMD160_CTX * ctx, u_int8_t const *buf, size_t len)
++RMD160Update (RMD160_CTX * ctx, u_int8_t const *buf, unsigned len)
+ {
+   unsigned i;
+ 
