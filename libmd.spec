@@ -2,13 +2,14 @@ Summary:	Message digest library
 Summary(pl.UTF-8):	Biblioteka skrótów wiadomości (Message Digest)
 Name:		libmd
 Version:	0.3
-Release:	2
+Release:	3
 License:	RSA non-commercial (MD2), RSA BSD-like (MD4), Public Domain (MD5)
 Group:		Libraries
 Source0:	ftp://ftp.penguin.cz/pub/users/mhi/libmd/%{name}-%{version}.tar.bz2
 # Source0-md5:	1db1795b7e87bbda542e4c33b6ce5566
 Patch0:		%{name}-install.patch
 Patch1:		%{name}-types.patch
+Patch2:		soname.patch
 URL:		http://martin.hinner.info/libmd/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -61,6 +62,7 @@ Statyczna biblioteka libmd.
 %setup -q
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %build
 cp -f /usr/share/automake/config.* .

@@ -1,0 +1,11 @@
+--- libmd-0.3/Makefile.in~	2018-10-31 19:29:24.000000000 +0100
++++ libmd-0.3/Makefile.in	2018-10-31 19:31:27.028214752 +0100
+@@ -94,7 +94,7 @@
+ 	cat md5.copyright >> $@
+ 
+ libmd.so.1.0:	$(OBJ)
+-	$(CC) -shared -o libmd.so.1.0 $(OBJ)
++	$(CC) -shared -Wl,-soname,libmd.so.1 -o libmd.so.1.0 $(OBJ)
+ 
+ libmd.a:	$(OBJ)
+ 	rm -f libmd.a
