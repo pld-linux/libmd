@@ -1,87 +1,75 @@
-Summary:	Message digest library
-Summary(pl.UTF-8):	Biblioteka skrótów wiadomości (Message Digest)
+Summary:	Message Digest functions from BSD systems
+Summary(pl.UTF-8):	Funkcje skrótów wiadomości (MD) z systemów BSD
 Name:		libmd
-Version:	0.3
-Release:	3
-License:	RSA non-commercial (MD2), RSA BSD-like (MD4), Public Domain (MD5)
+Version:	1.0.3
+Release:	1
+License:	BSD, ISC, Public Domain
 Group:		Libraries
-Source0:	ftp://ftp.penguin.cz/pub/users/mhi/libmd/%{name}-%{version}.tar.bz2
-# Source0-md5:	1db1795b7e87bbda542e4c33b6ce5566
-Patch0:		%{name}-install.patch
-Patch1:		%{name}-types.patch
-Patch2:		soname.patch
-URL:		http://martin.hinner.info/libmd/
-BuildRequires:	autoconf
-BuildRequires:	automake
-BuildRequires:	sgml-tools
+Source0:	https://libbsd.freedesktop.org/releases/%{name}-%{version}.tar.xz
+# Source0-md5:	58f9a39d0a4296c7d2d59287d4f81cdf
+URL:		https://www.hadrons.org/software/libmd/
+BuildRequires:	tar >= 1:1.22
+BuildRequires:	xz
+Obsoletes:	libmd-bsd < 1.0.4
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
-Libmd is a cryptographic message digest library. It implements these
-message digest algorithms:
- - MD2 (RFC 1319 - B. Kaliski)
- - MD4 (RFC 1186 - R. Rivest)
- - MD5 (RFC 1321 - R. Rivest)
- - SHA-1 (FIPS PUB 180 and 180.1 - NIST)
- - RIPEMD-160 <http://www.esat.kuleuven.ac.be/~bosselae/ripemd160.html>
+This library provides message digest functions found on BSD systems
+either on their libc or libmd libraries and lacking on others like GNU
+systems, thus making it easier to port projects with strong BSD
+origins, without needing to embed the same code over and over again on
+each project.
 
 %description -l pl.UTF-8
-Libmd to biblioteka kryptograficznych skrótów wiadomości. Implementuje
-następujące algorytmy skrótów wiadomości:
- - MD2 (RFC 1319 - B. Kaliski)
- - MD4 (RFC 1186 - R. Rivest)
- - MD5 (RFC 1321 - R. Rivest)
- - SHA-1 (FIPS PUB 180 oraz 180.1 - NIST)
- - RIPEMD-160 <http://www.esat.kuleuven.ac.be/~bosselae/ripemd160.html>
+Ta biblioteka udostępnia funkcje skrótów wiadomości spotykane w
+systemach BSD w bibliotece libc lub libmd, a nie występujące na
+innych systemach, takich jak GNU. Dzięki temu ułatwia portowanie
+projektów mających silne korzenie BSD bez potrzeby osadzania ciągle
+tego samego kodu w każdym projekcie.
 
 %package devel
-Summary:	Header files for libmd library
-Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki libmd
+Summary:	Header files for BSD MD library
+Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki BSD MD
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
+Obsoletes:	libmd-bsd-devel < 1.0.4
 
 %description devel
-Header files for libmd library.
+Header files for BSD MD library.
 
 %description devel -l pl.UTF-8
-Pliki nagłówkowe biblioteki libmd.
+Pliki nagłówkowe biblioteki BSD MD.
 
 %package static
-Summary:	Static libmd library
-Summary(pl.UTF-8):	Statyczna biblioteka libmd
+Summary:	Static BSD MD library
+Summary(pl.UTF-8):	Statyczna biblioteka BSD MD
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
+Obsoletes:	libmd-bsd-static < 1.0.4
 
 %description static
-Static libmd library.
+Static BSD MD library.
 
 %description static -l pl.UTF-8
-Statyczna biblioteka libmd.
+Statyczna biblioteka BSD MD.
 
 %prep
 %setup -q
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
 
 %build
-cp -f /usr/share/automake/config.* .
-%{__autoconf}
-%configure
-
-%{__make} \
-	CFLAGS="%{rpmcflags} %{rpmcppflags} -fPIC -I."
-
-%{__make} -C docs libmd.txt
+%configure \
+	--disable-silent-rules \
+	--includedir=%{_includedir}/libmd
+%{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
-# install headers to include/libmd to avoid too common filenames under /usr/include
 %{__make} install \
-	BUILDROOT=$RPM_BUILD_ROOT \
-	includedir=%{_includedir}/libmd \
-	libdir=%{_libdir}
+	DESTDIR=$RPM_BUILD_ROOT
+
+# obsoleted by pkg-config
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/libmd.la
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -91,18 +79,29 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc README TODO md2.copyright md4.copyright md5.copyright
-%attr(755,root,root) %{_libdir}/libmd.so.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmd.so.1
+%doc COPYING ChangeLog README
+%attr(755,root,root) %{_libdir}/libmd.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libmd.so.0
 
 %files devel
 %defattr(644,root,root,755)
-%doc docs/libmd.txt docs/algorithms
 %attr(755,root,root) %{_libdir}/libmd.so
 %{_includedir}/libmd
+%{_pkgconfigdir}/libmd.pc
+%{_mandir}/man3/MD2*.3*
+%{_mandir}/man3/MD4*.3*
+%{_mandir}/man3/MD5*.3*
+%{_mandir}/man3/RMD160*.3*
+%{_mandir}/man3/SHA1*.3*
+%{_mandir}/man3/SHA256*.3*
+%{_mandir}/man3/SHA384*.3*
+%{_mandir}/man3/SHA512*.3*
 %{_mandir}/man3/md2.3*
 %{_mandir}/man3/md4.3*
 %{_mandir}/man3/md5.3*
+%{_mandir}/man3/rmd160.3*
+%{_mandir}/man3/sha1.3*
+%{_mandir}/man3/sha2.3*
 
 %files static
 %defattr(644,root,root,755)
