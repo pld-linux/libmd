@@ -1,12 +1,12 @@
 Summary:	Message Digest functions from BSD systems
 Summary(pl.UTF-8):	Funkcje skrótów wiadomości (MD) z systemów BSD
 Name:		libmd
-Version:	1.0.3
+Version:	1.0.4
 Release:	1
 License:	BSD, ISC, Public Domain
 Group:		Libraries
 Source0:	https://libbsd.freedesktop.org/releases/%{name}-%{version}.tar.xz
-# Source0-md5:	58f9a39d0a4296c7d2d59287d4f81cdf
+# Source0-md5:	e8e955f8d53d2c9306b07c90ff6ae395
 URL:		https://www.hadrons.org/software/libmd/
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	xz
